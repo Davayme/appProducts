@@ -1,0 +1,26 @@
+<app-header title="Autenticacion" [isModal]="isModal"></app-header>
+
+<ion-content [fullscreen]="true">
+  <div class="d-flex center">
+    <form 
+    [formGroup]="group"
+    class="auth-form"
+    (ngSubmit)="submit()"
+    (keypress.enter)="submit()">
+      <app-logo> </app-logo>
+      <app-custom-input
+      autocomplete="email" icon="mail-outline" [formControl]="group.controls.email" 
+      type="email" label="Correo"></app-custom-input>
+
+      <app-custom-input
+      icon="lock-closed-outline" 
+      [formControl]="group.controls.password" 
+      type="password" label="Contraseña"
+      >
+    </app-custom-input>
+    
+    </form>
+  </div>
+  
+  
+</ion-content>
