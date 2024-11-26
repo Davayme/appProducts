@@ -9,16 +9,29 @@
     (keypress.enter)="submit()">
       <app-logo> </app-logo>
       <app-custom-input
-      autocomplete="email" icon="mail-outline" [formControl]="group.controls.email" 
+      autocomplete="email" icon="mail-outline" [control]="group.controls.email" 
       type="email" label="Correo"></app-custom-input>
 
       <app-custom-input
       icon="lock-closed-outline" 
-      [formControl]="group.controls.password" 
+      [control]="group.controls.password" 
       type="password" label="Contraseña"
       >
     </app-custom-input>
     
+    <p class="ion-text-end" routerLink="forgot-password">
+      Olvidaste tu contraseña?
+    </p>
+
+    <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="group.invalid">
+      Ingresar
+      <ion-icon slot="end" name="log-in-outline"></ion-icon>
+    </ion-button>
+
+    <ion-button expand="block" mode="ios" class="submit" type="submit" routerLink="sign-up">
+      Regístrate
+      <ion-icon slot="end" name="person-add-outline"></ion-icon>
+    </ion-button>
     </form>
   </div>
   

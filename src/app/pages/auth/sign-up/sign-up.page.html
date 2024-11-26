@@ -1,13 +1,62 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>sign-up</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Crear usuario" [isModal]="isModal"></app-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">sign-up</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="d-flex center">
+    <form
+      [formGroup]="group"
+      class="auth-form"
+      (ngSubmit)="submit()"
+      (keypress.enter)="submit()"
+    >
+      <app-logo> </app-logo>
+      <app-custom-input
+        autocomplete="name"
+        icon="person-outline"
+        [control]="group.controls.name"
+        type="text"
+        label="Nombre"
+      ></app-custom-input>
+      <app-custom-input
+        autocomplete="email"
+        icon="mail-outline"
+        [control]="group.controls.email"
+        type="email"
+        label="Correo"
+      ></app-custom-input>
+
+      <app-custom-input
+        icon="lock-closed-outline"
+        [control]="group.controls.password"
+        type="password"
+        label="Contraseña"
+      >
+      </app-custom-input>
+
+      <p class="ion-text-end" routerLink="forgot-password">
+        Olvidaste tu contraseña?
+      </p>
+
+      <ion-button
+        expand="block"
+        mode="ios"
+        class="submit"
+        type="submit"
+        [disabled]="group.invalid"
+      >
+        Ingresar
+        <ion-icon slot="end" name="log-in-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        mode="ios"
+        class="submit"
+        type="submit"
+        routerLink="sign-up"
+      >
+        Regístrate
+        <ion-icon slot="end" name="person-add-outline"></ion-icon>
+      </ion-button>
+    </form>
+  </div>
 </ion-content>

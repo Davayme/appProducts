@@ -8,7 +8,7 @@ import { FormControl } from '@angular/forms';
 })
 export class CustomInputComponent implements OnInit {
 
-  @Input() formControl!: FormControl;
+  @Input() control!: FormControl;
   @Input() type: string = 'text';
   @Input() label!: string;
   @Input() required!: boolean;
