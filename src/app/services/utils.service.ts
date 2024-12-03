@@ -17,27 +17,26 @@ export class UtilsService {
     await alert.present();
   }
 
-  async presentLoading(opst: LoadingOptions) {
-    const alert = await this.loadingCtrl.create(opst);
-  
+  async presentLoading() {
+    const alert = await this.loadingCtrl.create({ spinner: 'crescent' });
     await alert.present();
   }
-  
+
   async presentToast(opst: ToastOptions) {
     const alert = await this.loadingCtrl.create(opst);
-  
+
     await alert.present();
   }
-  
-  routerLink(url:string){
+
+  routerLink(url: string) {
     this.route.navigate([url]);
   }
 
-  saveInLocalStorage(key:string, value:string){
+  saveInLocalStorage(key: string, value: string) {
     return localStorage.setItem(key, JSON.stringify(value));
   }
 
-  getFromLocalStorage(key:string){
+  getFromLocalStorage(key: string) {
     return JSON.parse(localStorage.getItem(key)!);
   }
 }

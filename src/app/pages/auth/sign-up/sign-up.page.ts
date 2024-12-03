@@ -12,6 +12,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class SignUpPage {
   isModal: boolean = false;
   group = new FormGroup({
+    uid: new FormControl(''),
     name: new FormControl('', [Validators.required, Validators.minLength(4)]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -22,10 +23,14 @@ export class SignUpPage {
   firebaseSrv = inject(FirebaseService);
   utilSrv = inject(UtilsService);
 
-  submit() {
+  async submit() {
     if (this.group.valid) {
-      this.firebaseSrv.signIn(this.group.value as User).then((res) => {
-        console.log(res);
+      const loading = await this.utilSrv.presentLoading();
+      this.firebaseSrv.signUp(this.group.value as User).then(async (res) => {
+        await this.firebaseSrv.updateUser(this.group.value.name!);
+        let uid = res.user?.uid;
+        this.group.controls.uid.setValue(uid);
+        this.setUserInfo(uid);
       }).catch((err) => {
         this.utilSrv.presentAlert({
           header: 'Error',
@@ -36,5 +41,8 @@ export class SignUpPage {
     }
   }
 
+  setUserInfo(uid: string) {
+
+  }
 
 }
