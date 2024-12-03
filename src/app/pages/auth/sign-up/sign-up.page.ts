@@ -26,23 +26,44 @@ export class SignUpPage {
   async submit() {
     if (this.group.valid) {
       const loading = await this.utilSrv.presentLoading();
+      loading.present();
+      loading
       this.firebaseSrv.signUp(this.group.value as User).then(async (res) => {
         await this.firebaseSrv.updateUser(this.group.value.name!);
         let uid = res.user?.uid;
         this.group.controls.uid.setValue(uid);
         this.setUserInfo(uid);
       }).catch((err) => {
-        this.utilSrv.presentAlert({
-          header: 'Error',
+        this.utilSrv.presentToast({
           message: err.message,
-          buttons: ['OK']
+          color: 'danger',
+          duration: 2000,
+          icon: 'alert-circle-outline'
         });
-      });
+      })
+        .finally(() => {
+          loading.dismiss();
+
+        });
     }
   }
 
-  setUserInfo(uid: string) {
+  async setUserInfo(uid: string) {
+    if (this.group.valid) {
+      const loading = await this.utilSrv.presentLoading();
+      loading.present();
+      let path = `users/${uid}`;
+      delete this.group.value.password;
 
+      this.firebaseSrv.setDocument(path, this.group.value).then( res => {
+         this.utilSrv.saveInLocalStorage('user', this.group.value)
+         this.utilSrv.routerLink('main/home');
+      }
+
+      ).finally(() => {
+        loading.dismiss();
+      });
+    }
   }
 
 }

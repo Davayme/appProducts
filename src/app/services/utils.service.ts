@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, AlertOptions, LoadingController, LoadingOptions, ModalController, ToastController, ToastOptions } from '@ionic/angular';
+import { AlertController, AlertOptions, LoadingController, ModalController, ToastController, ToastOptions } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -12,27 +12,26 @@ export class UtilsService {
   modalCtrrl = inject(ModalController);
   route = inject(Router);
 
-  async presentAlert(opts: AlertOptions) {
-    const alert = await this.alertCtrl.create(opts);
-    await alert.present();
+  presentAlert(opts: AlertOptions) {
+    return this.alertCtrl.create(opts);
+
   }
 
-  async presentLoading() {
-    const alert = await this.loadingCtrl.create({ spinner: 'crescent' });
-    await alert.present();
+  presentLoading() {
+    return this.loadingCtrl.create({ spinner: 'crescent' });
+
   }
 
-  async presentToast(opst: ToastOptions) {
-    const alert = await this.loadingCtrl.create(opst);
+  presentToast(opst: ToastOptions) {
+    return this.loadingCtrl.create(opst);
 
-    await alert.present();
   }
 
   routerLink(url: string) {
     this.route.navigate([url]);
   }
 
-  saveInLocalStorage(key: string, value: string) {
+  saveInLocalStorage(key: string, value: any) {
     return localStorage.setItem(key, JSON.stringify(value));
   }
 
