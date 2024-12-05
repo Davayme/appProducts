@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, AlertOptions, LoadingController, ModalController, ToastController, ToastOptions } from '@ionic/angular';
+import { AlertController, AlertOptions, LoadingController, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -22,9 +22,10 @@ export class UtilsService {
 
   }
 
-  presentToast(opst: ToastOptions) {
-    return this.loadingCtrl.create(opst);
-
+  async presentToast(opst: ToastOptions) {
+    const toast = await this.toastCtrl.create(opst);
+    await toast.present();
+    return toast;
   }
 
   routerLink(url: string) {
@@ -37,5 +38,19 @@ export class UtilsService {
 
   getFromLocalStorage(key: string) {
     return JSON.parse(localStorage.getItem(key)!);
+  }
+
+  async presentModal(opts: ModalOptions){
+    const modal = await this.modalCtrrl.create(opts);
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+    if(data){
+      return data;
+    }
+
+  }
+
+  dissmisModal(data?:any){
+    return this.modalCtrrl.dismiss(data);
   }
 }

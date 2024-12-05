@@ -2,6 +2,6 @@ export interface User{
     uido: string;
     email: string;
     password: string;
-    displayName: string;
+    name: string;
     image: string;
 }

@@ -1,0 +1,59 @@
+<app-header [title]="product? 'Actualizar producto' : 'Registrar producto'" [isModal]="isModal"></app-header>
+
+<ion-content [fullscreen]="true">
+  <div class="d-flex center">
+    <form 
+    [formGroup]="group"
+    class="ion-padding ion-text-center"
+    (ngSubmit)="submit()"
+    (keypress.enter)="submit()">
+
+    <ion-avatar *ngIf="group.value.image">
+      <img [src]="group.value.image" />
+    </ion-avatar>
+
+    <ion-icon class="image-icon" *ngIf="!group.value.image" name="image-outline"></ion-icon>
+
+    <br>
+
+    <ion-button (click) = "takeImage()"
+    size="small"
+    shape="round"> Tomar/Seleccionar </ion-button>
+
+    <app-custom-input
+    icon="person-outline" 
+    [control]="group.controls.name" 
+    type="text" label="Producto"
+    >
+    </app-custom-input>
+
+    <app-custom-input
+    icon="person-outline" 
+    [control]="group.controls.price" 
+    type="text" label="Precio"
+    >
+    </app-custom-input>
+
+      <app-custom-input
+      icon="lock-closed-outline" 
+      [control]="group.controls.soldUnits" 
+      type="text" label="Unidades vendidas"
+      >
+    </app-custom-input>
+
+    <ion-button
+    expand="block"
+    class="submit"
+    type="submit"
+    [disabled]="group.invalid"
+    >
+      Registrar
+      <ion-icon slot="end" name="person-add-outline" ></ion-icon>
+    </ion-button>
+
+
+    </form>
+  </div>
+  
+  
+</ion-content>

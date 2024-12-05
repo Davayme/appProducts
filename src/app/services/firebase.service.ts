@@ -59,4 +59,8 @@ export class FirebaseService {
       displayName
     });
   }
+  
+  sendResetPasswordEmail(email:string){
+    return sendPasswordResetEmail(getAuth(), email);
+  }
 }
