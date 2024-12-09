@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AlertController, AlertOptions, LoadingController, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
 
 @Injectable({
@@ -40,17 +41,30 @@ export class UtilsService {
     return JSON.parse(localStorage.getItem(key)!);
   }
 
-  async presentModal(opts: ModalOptions){
+  async presentModal(opts: ModalOptions) {
     const modal = await this.modalCtrrl.create(opts);
     await modal.present();
     const { data } = await modal.onWillDismiss();
-    if(data){
+    if (data) {
       return data;
     }
 
   }
 
-  dissmisModal(data?:any){
+  dissmisModal(data?: any) {
     return this.modalCtrrl.dismiss(data);
   }
+
+  async takePicture(promptLabelHeader: string) {
+    return await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Prompt,
+      promptLabelHeader,
+      promptLabelPhoto: 'Selecciona una imagen',
+      promptLabelPicture: 'Toma una foto'
+    });
+  };
+
 }
