@@ -26,10 +26,10 @@ export class ForgotPasswordPage {
       const loading = await this.utilsSvc.presentLoading();
       loading.present();
       this.firebaseSvc.sendResetPasswordEmail(this.group.value.email!)
-      .then(async(res) => {
+      .then(async(res:any) => {
         this.utilsSvc.routerLink('/auth');
       })
-      .catch(async(err) => {
+      .catch(async(err:any) => {
         this.utilsSvc.presentToast({
           message: err.message,
           color: 'danger',

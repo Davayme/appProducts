@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, getAuth } from 'firebase/auth';
 import { User } from '../models/IUser';
-import { getFirestore, setDoc, doc, getDoc, collection, collectionData, query, updateDoc, deleteDoc, addDoc } from '@angular/fire/firestore'
+import { getFirestore, setDoc, doc, getDoc, getDocs, collection, collectionData, query, updateDoc, deleteDoc, addDoc } from '@angular/fire/firestore'
 import {
   getStorage,
   ref,
@@ -10,78 +10,86 @@ import {
   getDownloadURL,
   deleteObject,
 } from 'firebase/storage';
+
+import { v4 as uuidv4 } from 'uuid';
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
   auth = inject(AngularFireAuth);
-  constructor() { }
+  constructor() {}
+  //autentificacion
 
-  //Autenticacion
   getAuth() {
-    return this.auth;
+    return getAuth();
   }
 
-  //Login
+  //login
   signIn(user: User) {
-    return signInWithEmailAndPassword(getAuth(), user.email, user.password);
+    return signInWithEmailAndPassword(
+      this.getAuth(),
+      user.email,
+      user.password
+    );
+  }
+  //create user
+  singUp(user: User) {
+    return createUserWithEmailAndPassword(
+      this.getAuth(),
+      user.email,
+      user.password
+    );
+  }
+  updateProfile(name: string) {
+    return updateProfile(this.getAuth().currentUser!, {
+      displayName: name,
+    });
   }
 
-  //Registro
-  signUp(user: User) {
-    return createUserWithEmailAndPassword(getAuth(), user.email, user.password);
-  }
-
-  //Base de datos
-  getCollectionData(path: string, collectionQuery?: any) {
+  async getCollectionData(path: string) {
     const ref = collection(getFirestore(), path);
-    return collectionData(query(ref, ...collectionQuery), { idField: 'id' });
+    const snapshot = await getDocs(ref);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   }
 
-  //Setear un documento 
+  //setear doc
   setDocument(path: string, data: any) {
     return setDoc(doc(getFirestore(), path), data);
   }
 
+  //actualizar doc
   updateDocument(path: string, data: any) {
     return updateDoc(doc(getFirestore(), path), data);
   }
 
+  //eliminar doc
   deleteDocument(path: string) {
     return deleteDoc(doc(getFirestore(), path));
   }
 
   async getDocument(path: string) {
-    return getDoc(doc(getFirestore(), path));
+    return (await getDoc(doc(getFirestore(), path))).data();
   }
-
-  //agregar un documento
-  addDocument(path: string, data: any) {
-    return addDoc(collection(getFirestore(), path), data);
-  }
-
-  //update user
-  async updateUser(displayName: string) {
-    return updateProfile(getAuth().currentUser!, {
-      displayName
-    });
-  }
-
-  sendResetPasswordEmail(email: string) {
-    return sendPasswordResetEmail(getAuth(), email);
+  //enviar email de reseteo
+  async sendResetEmail(email: string) {
+    return sendPasswordResetEmail(this.getAuth(), email);
   }
 
   async uploadImage(path: string, data_url: string) {
     return uploadString(ref(getStorage(), path), data_url, 'data_url').then(() => {
-      return getDownloadURL(ref(getStorage(), path))
+    return getDownloadURL(ref(getStorage(), path))
     })
-  }
-
+    }
+  //====== Obtener ruta de la imagen con su url =====
   async getFilePath(url: string) {
-    return ref(getStorage(), url).fullPath
+    return ref(getStorage(), url).fullPath;
   }
-
+  //====== Eliminar archivo =====
   deleteFile(path: string) {
     return deleteObject(ref(getStorage(), path));
+  }
+
+  generateId() {
+    return uuidv4();
   }
 }
